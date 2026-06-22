@@ -1,0 +1,57 @@
+{
+  "locale": "en-US",
+  "displayName": "English (US)",
+  "adjectives": [
+    "Broken", "Electric", "Midnight", "Golden", "Silent", "Lonely", "Wild", "Frozen",
+    "Crimson", "Velvet", "Hollow", "Restless", "Endless", "Distant", "Neon", "Fading",
+    "Sacred", "Reckless", "Bitter", "Tender", "Stolen", "Shattered", "Burning", "Quiet"
+  ],
+  "nouns": [
+    "Hearts", "Shadows", "Dreams", "Roads", "Skies", "Tears", "Lights", "Whispers",
+    "Echoes", "Stars", "Rain", "Fire", "Ocean", "Memories", "Streets", "Wings",
+    "Ashes", "Storm", "Horizon", "Mirror", "Glass", "Smoke", "Thunder", "Bones"
+  ],
+  "titleTemplates": [
+    "{adj} {noun}",
+    "{noun} of {noun}",
+    "The {adj} {noun}",
+    "{noun} in the {adj} {noun}",
+    "Don't Stop the {noun}",
+    "{adj} Like {noun}"
+  ],
+  "firstNames": [
+    "James", "Mary", "Robert", "Patricia", "John", "Jennifer", "Michael", "Linda",
+    "David", "Elizabeth", "William", "Barbara", "Richard", "Susan", "Joseph", "Jessica",
+    "Aaron", "Melanie", "Albert", "Ella", "Anu", "Mimi"
+  ],
+  "lastNames": [
+    "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis",
+    "Rodriguez", "Martinez", "Aaronson", "Norton Stone", "Fiz", "Viprasavah"
+  ],
+  "bandNamePrefixes": [
+    "The", "Dr.", "Sgt.", "Captain", "Mr.", "Lady", "Saint", "Young"
+  ],
+  "bandNameNouns": [
+    "Wolves", "Cockroaches", "Echoes", "Rebels", "Pioneers", "Outlaws", "Dreamers",
+    "Travelers", "Misfits", "Ravens", "Pilots", "Strangers", "Lonely Hearts Club Band"
+  ],
+  "albumWords": [
+    "Horizon", "Velvet Dreams", "Static", "Afterglow", "Wildfire", "Paper Moon",
+    "Get Schwifty!", "Simulacra and Simulation", "Oh, My God", "Yesn't", "Friends",
+    "That's It", "Do or Don't", "No Good Deal", "All My Circuits"
+  ],
+  "genres": [
+    "Rock'n'Roll", "Pop", "Hip-Hop", "Jazz", "Blues", "Country", "Electronic",
+    "House", "Folk", "Heavy Metal", "Reggae", "Classical", "Punk", "Soul"
+  ],
+  "reviewSentences": [
+    "This track instantly pulled me in from the first second.",
+    "A surprisingly emotional ride for such a short song.",
+    "The chorus has been stuck in my head for days.",
+    "Not their best work, but still worth a listen.",
+    "Production feels fresh and the mix is incredibly clean.",
+    "I didn't expect this combination of sounds to work so well.",
+    "Perfect for late-night drives with the windows down.",
+    "The lyrics hit harder than I anticipated."
+  ]
+}
