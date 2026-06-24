@@ -1,8 +1,128 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model SongShowcase.Models.SongTableViewModel
+@{
+    ViewData["Title"] = "Song Showcase";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="toolbar">
+    <div class="toolbar-item">
+        <label for="localeSelect">Language</label>
+        <select id="localeSelect">
+            @foreach (var (locale, displayName) in Model.AvailableLocales)
+            {
+                if (locale == Model.Locale)
+                {
+                    <option value="@locale" selected>@displayName</option>
+                }
+                else
+                {
+                    <option value="@locale">@displayName</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="toolbar-item">
+        <label for="seedInput">Seed</label>
+        <div class="seed-row">
+            <input type="number" id="seedInput" value="@Model.Seed" />
+            <button type="button" id="randomSeedBtn" title="Generate random seed">&#x21BA;</button>
+        </div>
+    </div>
+
+    <div class="toolbar-item">
+        <label>Likes &nbsp;<span id="likesValue">@Model.AverageLikes.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)</span></label>
+        <div class="likes-row">
+            <input type="range" id="likesInput" min="0" max="10" step="0.1"
+                   value="@Model.AverageLikes.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+        </div>
+    </div>
 </div>
+
+<div class="container">
+    <table class="songs-table">
+        <thead>
+            <tr>
+                <th class="col-expand"></th>
+                <th class="col-index">#</th>
+                <th class="col-title">Song</th>
+                <th class="col-artist">Artist</th>
+                <th class="col-album">Album</th>
+                <th class="col-genre">Genre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var song in Model.Songs)
+            {
+                <tr class="song-row" data-index="@song.Index">
+                    <td class="col-expand">
+                        <button class="expand-btn" title="Expand">&#x2228;</button>
+                    </td>
+                    <td class="col-index">@song.Index</td>
+                    <td class="col-title">@song.Title</td>
+                    <td class="col-artist">@song.Artist</td>
+                    <td class="col-album">
+                        @if (string.IsNullOrEmpty(song.Album))
+                        {
+                            <span class="single-label">Single</span>
+                        }
+                        else
+                        {
+                            @song.Album
+                        }
+                    </td>
+                    <td class="col-genre"><span class="genre-badge">@song.Genre</span></td>
+                </tr>
+                <tr class="song-details-row hidden" data-for="@song.Index">
+                    <td colspan="6">
+                        <div class="song-details">
+                            <div class="song-details-cover">
+                                <img class="cover-img" src="@song.CoverImageUrl" alt="@song.Title cover" loading="lazy" />
+                                <div class="likes-badge">@song.Likes &#x1F44D;</div>
+                            </div>
+                            <div class="song-details-info">
+                                <div class="song-title-row">
+                                    <h3>@song.Title</h3>
+                                    <button class="play-btn" data-audio-url="@song.AudioUrl" title="Play preview">&#x25B6;</button>
+                                </div>
+                                <p class="details-meta">
+                                    from <em>@(string.IsNullOrEmpty(song.Album) ? "Single" : song.Album)</em>
+                                    by <strong>@song.Artist</strong>
+                                </p>
+                                <div class="review-text">@song.ReviewText</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    @if (Model.HasPrevPage)
+    {
+        <a class="page-btn" href="#" data-page="@(Model.Page - 1)">&laquo;</a>
+        @if (Model.Page > 2)
+        {
+            <a class="page-btn" href="#" data-page="1">1</a>
+            @if (Model.Page > 3){ <span class="page-ellipsis">...</span> }
+        }
+        <a class="page-btn" href="#" data-page="@(Model.Page - 1)">@(Model.Page - 1)</a>
+    }
+    <span class="page-btn current">@Model.Page</span>
+    <a class="page-btn" href="#" data-page="@(Model.Page + 1)">@(Model.Page + 1)</a>
+    <a class="page-btn" href="#" data-page="@(Model.Page + 2)">@(Model.Page + 2)</a>
+    <a class="page-btn next-btn" href="#" data-page="@(Model.Page + 1)">&raquo;</a>
+</div>
+
+<script>
+    window.appState = {
+        locale: '@Model.Locale',
+        seed: @Model.Seed,
+        averageLikes: @Model.AverageLikes.ToString(System.Globalization.CultureInfo.InvariantCulture),
+        page: @Model.Page
+    };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@tonejs/midi@@2.0.28/build/Midi.min.js"></script>
+<script src="~/js/app.js"></script>

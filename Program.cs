@@ -1,7 +1,14 @@
+using SongShowcase.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<LocalizationService>();
+builder.Services.AddSingleton<SongGeneratorService>();
+builder.Services.AddSingleton<CoverGeneratorService>();
+builder.Services.AddSingleton<MidiGeneratorService>();
 
 var app = builder.Build();
 
