@@ -38,65 +38,63 @@
     </div>
 </div>
 
-<div class="container">
-    <table class="songs-table">
-        <thead>
-            <tr>
-                <th class="col-expand"></th>
-                <th class="col-index">#</th>
-                <th class="col-title">Song</th>
-                <th class="col-artist">Artist</th>
-                <th class="col-album">Album</th>
-                <th class="col-genre">Genre</th>
+<table class="songs-table">
+    <thead>
+        <tr>
+            <th class="col-expand"></th>
+            <th class="col-index">#</th>
+            <th class="col-title">Song</th>
+            <th class="col-artist">Artist</th>
+            <th class="col-album">Album</th>
+            <th class="col-genre">Genre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var song in Model.Songs)
+        {
+            <tr class="song-row" data-index="@song.Index">
+                <td class="col-expand">
+                    <button class="expand-btn" title="Expand">&#x2228;</button>
+                </td>
+                <td class="col-index">@song.Index</td>
+                <td class="col-title">@song.Title</td>
+                <td class="col-artist">@song.Artist</td>
+                <td class="col-album">
+                    @if (string.IsNullOrEmpty(song.Album))
+                    {
+                        <span class="single-label">Single</span>
+                    }
+                    else
+                    {
+                        @song.Album
+                    }
+                </td>
+                <td class="col-genre"><span class="genre-badge">@song.Genre</span></td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var song in Model.Songs)
-            {
-                <tr class="song-row" data-index="@song.Index">
-                    <td class="col-expand">
-                        <button class="expand-btn" title="Expand">&#x2228;</button>
-                    </td>
-                    <td class="col-index">@song.Index</td>
-                    <td class="col-title">@song.Title</td>
-                    <td class="col-artist">@song.Artist</td>
-                    <td class="col-album">
-                        @if (string.IsNullOrEmpty(song.Album))
-                        {
-                            <span class="single-label">Single</span>
-                        }
-                        else
-                        {
-                            @song.Album
-                        }
-                    </td>
-                    <td class="col-genre"><span class="genre-badge">@song.Genre</span></td>
-                </tr>
-                <tr class="song-details-row hidden" data-for="@song.Index">
-                    <td colspan="6">
-                        <div class="song-details">
-                            <div class="song-details-cover">
-                                <img class="cover-img" src="@song.CoverImageUrl" alt="@song.Title cover" loading="lazy" />
-                                <div class="likes-badge">@song.Likes &#x1F44D;</div>
-                            </div>
-                            <div class="song-details-info">
-                                <div class="song-title-row">
-                                    <h3>@song.Title</h3>
-                                    <button class="play-btn" data-audio-url="@song.AudioUrl" title="Play preview">&#x25B6;</button>
-                                </div>
-                                <p class="details-meta">
-                                    from <em>@(string.IsNullOrEmpty(song.Album) ? "Single" : song.Album)</em>
-                                    by <strong>@song.Artist</strong>
-                                </p>
-                                <div class="review-text">@song.ReviewText</div>
-                            </div>
+            <tr class="song-details-row hidden" data-for="@song.Index">
+                <td colspan="6">
+                    <div class="song-details">
+                        <div class="song-details-cover">
+                            <img class="cover-img" src="@song.CoverImageUrl" alt="@song.Title cover" loading="lazy" />
+                            <div class="likes-badge">@song.Likes &#x1F44D;</div>
                         </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                        <div class="song-details-info">
+                            <div class="song-title-row">
+                                <h3>@song.Title</h3>
+                                <button class="play-btn" data-audio-url="@song.AudioUrl" title="Play preview">&#x25B6;</button>
+                            </div>
+                            <p class="details-meta">
+                                from <em>@(string.IsNullOrEmpty(song.Album) ? "Single" : song.Album)</em>
+                                by <strong>@song.Artist</strong>
+                            </p>
+                            <div class="review-text">@song.ReviewText</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <div class="pagination">
     @if (Model.HasPrevPage)

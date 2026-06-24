@@ -44,13 +44,11 @@ public class MidiGeneratorService
         var midiFile = new MidiFile();
         midiFile.TimeDivision = new TicksPerQuarterNoteTimeDivision(TicksPerQuarter);
 
-        // Темп
         var tempoTrack = new TrackChunk(
             new SetTempoEvent((long)(60_000_000.0 / bpm))
         );
         midiFile.Chunks.Add(tempoTrack);
 
-        // Мелодия
         var melodyTrack = new TrackChunk();
         using (var notes = melodyTrack.ManageNotes())
         {
@@ -65,7 +63,6 @@ public class MidiGeneratorService
         }
         midiFile.Chunks.Add(melodyTrack);
 
-        // Аккорды
         var chordTrack = new TrackChunk();
         using (var notes = chordTrack.ManageNotes())
         {
@@ -88,7 +85,6 @@ public class MidiGeneratorService
         }
         midiFile.Chunks.Add(chordTrack);
 
-        // Бас
         var bassTrack = new TrackChunk();
         using (var notes = bassTrack.ManageNotes())
         {
