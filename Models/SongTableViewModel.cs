@@ -8,6 +8,8 @@ public class SongTableViewModel
     public double AverageLikes { get; set; }
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = 10;
+    public string ViewMode { get; set; } = "table";
+    public bool IsGallery => ViewMode.Equals("gallery", StringComparison.OrdinalIgnoreCase);
     public List<Song> Songs { get; set; } = new();
     public List<(string Locale, string DisplayName)> AvailableLocales { get; set; } = new();
 

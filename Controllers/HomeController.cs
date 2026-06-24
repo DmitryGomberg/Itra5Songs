@@ -29,10 +29,14 @@ public class HomeController : Controller
         long seed = 0,
         double averageLikes = 0,
         int page = 1,
-        int pageSize = 10)
+        int pageSize = 0,
+        string view = "table")
     {
         if (seed == 0)
             seed = new Random().NextInt64(1, long.MaxValue);
+
+        if (pageSize <= 0)
+            pageSize = string.Equals(view, "gallery", StringComparison.OrdinalIgnoreCase) ? 12 : 10;
 
         var request = new GenerationRequest
         {
@@ -58,6 +62,7 @@ public class HomeController : Controller
             AverageLikes = averageLikes,
             Page = page,
             PageSize = pageSize,
+            ViewMode = string.Equals(view, "gallery", StringComparison.OrdinalIgnoreCase) ? "gallery" : "table",
             Songs = songs,
             AvailableLocales = _localization.GetAvailable().ToList()
         };

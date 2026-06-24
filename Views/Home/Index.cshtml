@@ -3,6 +3,18 @@
     ViewData["Title"] = "Song Showcase";
 }
 
+<header class="site-header">
+    <div class="site-header-inner">
+        <div class="logo">FPE</div>
+        <div class="header-info">
+            <div class="header-item">Seed: @Model.Seed</div>
+            <div class="header-item">Likes: @Model.AverageLikes.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)</div>
+            <div class="header-item">View: @Model.ViewMode</div>
+        </div>
+    </div>
+</header>
+
+<div class="site-main">
 <div class="toolbar">
     <div class="toolbar-item">
         <label for="localeSelect">Language</label>
@@ -36,81 +48,126 @@
                    value="@Model.AverageLikes.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
         </div>
     </div>
+
+    <div class="toolbar-item toolbar-item--right">
+        <label class="toolbar-label">Display</label>
+        <div class="view-switch">
+            <button type="button" class="view-btn @(Model.IsGallery ? "" : "active")" data-view="table" title="Table View" aria-label="Table View">
+                <span class="view-icon">☰</span>
+            </button>
+            <button type="button" class="view-btn @(Model.IsGallery ? "active" : "")" data-view="gallery" title="Gallery View" aria-label="Gallery View">
+                <span class="view-icon">▦</span>
+            </button>
+        </div>
+    </div>
 </div>
 
-<table class="songs-table">
-    <thead>
-        <tr>
-            <th class="col-expand"></th>
-            <th class="col-index">#</th>
-            <th class="col-title">Song</th>
-            <th class="col-artist">Artist</th>
-            <th class="col-album">Album</th>
-            <th class="col-genre">Genre</th>
-        </tr>
-    </thead>
-    <tbody>
+<div id="tableView" class="@(Model.IsGallery ? "hidden" : "")">
+    <table class="songs-table">
+        <thead>
+            <tr>
+                <th class="col-expand"></th>
+                <th class="col-index">#</th>
+                <th class="col-title">Song</th>
+                <th class="col-artist">Artist</th>
+                <th class="col-album">Album</th>
+                <th class="col-genre">Genre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var song in Model.Songs)
+            {
+                <tr class="song-row" data-index="@song.Index">
+                    <td class="col-expand">
+                        <button class="expand-btn" title="Expand" aria-expanded="false">
+                            <svg class="expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </td>
+                    <td class="col-index">@song.Index</td>
+                    <td class="col-title">@song.Title</td>
+                    <td class="col-artist">@song.Artist</td>
+                    <td class="col-album">
+                        @if (string.IsNullOrEmpty(song.Album))
+                        {
+                            <span class="single-label">Single</span>
+                        }
+                        else
+                        {
+                            @song.Album
+                        }
+                    </td>
+                    <td class="col-genre"><span class="genre-badge">@song.Genre</span></td>
+                </tr>
+                <tr class="song-details-row hidden" data-for="@song.Index">
+                    <td colspan="6">
+                        <div class="song-details">
+                            <div class="song-details-cover">
+                                <img class="cover-img" src="@song.CoverImageUrl" alt="@song.Title cover" loading="lazy" />
+                                <div class="likes-badge">@song.Likes &#x1F44D;</div>
+                            </div>
+                            <div class="song-details-info">
+                                <div class="song-title-row">
+                                    <h3>@song.Title</h3>
+                                    <button class="play-btn" data-audio-url="@song.AudioUrl" title="Play preview">&#x25B6;</button>
+                                </div>
+                                <p class="details-meta">
+                                    from <em>@(string.IsNullOrEmpty(song.Album) ? "Single" : song.Album)</em>
+                                    by <strong>@song.Artist</strong>
+                                </p>
+                                <div class="review-text">@song.ReviewText</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div id="paginationContainer" class="pagination">
+        @if (Model.HasPrevPage)
+        {
+            <a class="page-btn" href="#" data-page="@(Model.Page - 1)">&laquo;</a>
+            @if (Model.Page > 2)
+            {
+                <a class="page-btn" href="#" data-page="1">1</a>
+                @if (Model.Page > 3){ <span class="page-ellipsis">...</span> }
+            }
+            <a class="page-btn" href="#" data-page="@(Model.Page - 1)">@(Model.Page - 1)</a>
+        }
+        <span class="page-btn current">@Model.Page</span>
+        <a class="page-btn" href="#" data-page="@(Model.Page + 1)">@(Model.Page + 1)</a>
+        <a class="page-btn" href="#" data-page="@(Model.Page + 2)">@(Model.Page + 2)</a>
+        <a class="page-btn next-btn" href="#" data-page="@(Model.Page + 1)">&raquo;</a>
+    </div>
+</div>
+
+<div id="galleryView" class="gallery-view @(Model.IsGallery ? "" : "hidden")">
+    <div class="gallery-grid" id="galleryGrid">
         @foreach (var song in Model.Songs)
         {
-            <tr class="song-row" data-index="@song.Index">
-                <td class="col-expand">
-                    <button class="expand-btn" title="Expand">&#x2228;</button>
-                </td>
-                <td class="col-index">@song.Index</td>
-                <td class="col-title">@song.Title</td>
-                <td class="col-artist">@song.Artist</td>
-                <td class="col-album">
-                    @if (string.IsNullOrEmpty(song.Album))
-                    {
-                        <span class="single-label">Single</span>
-                    }
-                    else
-                    {
-                        @song.Album
-                    }
-                </td>
-                <td class="col-genre"><span class="genre-badge">@song.Genre</span></td>
-            </tr>
-            <tr class="song-details-row hidden" data-for="@song.Index">
-                <td colspan="6">
-                    <div class="song-details">
-                        <div class="song-details-cover">
-                            <img class="cover-img" src="@song.CoverImageUrl" alt="@song.Title cover" loading="lazy" />
-                            <div class="likes-badge">@song.Likes &#x1F44D;</div>
-                        </div>
-                        <div class="song-details-info">
-                            <div class="song-title-row">
-                                <h3>@song.Title</h3>
-                                <button class="play-btn" data-audio-url="@song.AudioUrl" title="Play preview">&#x25B6;</button>
-                            </div>
-                            <p class="details-meta">
-                                from <em>@(string.IsNullOrEmpty(song.Album) ? "Single" : song.Album)</em>
-                                by <strong>@song.Artist</strong>
-                            </p>
-                            <div class="review-text">@song.ReviewText</div>
-                        </div>
+            <div class="gallery-card">
+                <img class="gallery-cover" src="@song.CoverImageUrl" alt="@song.Title cover" loading="lazy" />
+                <div class="gallery-card-body">
+                    <h3>@song.Title</h3>
+                    <p class="gallery-meta">by <strong>@song.Artist</strong></p>
+                    <p class="gallery-meta">from <em>@(string.IsNullOrEmpty(song.Album) ? "Single" : song.Album)</em></p>
+                    <p class="gallery-genre">@song.Genre</p>
+                    <div class="gallery-actions">
+                        <button type="button" class="play-btn" data-audio-url="@song.AudioUrl" title="Play preview">&#x25B6;</button>
+                        <span class="likes-badge">@song.Likes &#x1F44D;</span>
                     </div>
-                </td>
-            </tr>
+                    <div class="review-text">@song.ReviewText</div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
 
-<div class="pagination">
-    @if (Model.HasPrevPage)
-    {
-        <a class="page-btn" href="#" data-page="@(Model.Page - 1)">&laquo;</a>
-        @if (Model.Page > 2)
-        {
-            <a class="page-btn" href="#" data-page="1">1</a>
-            @if (Model.Page > 3){ <span class="page-ellipsis">...</span> }
-        }
-        <a class="page-btn" href="#" data-page="@(Model.Page - 1)">@(Model.Page - 1)</a>
-    }
-    <span class="page-btn current">@Model.Page</span>
-    <a class="page-btn" href="#" data-page="@(Model.Page + 1)">@(Model.Page + 1)</a>
-    <a class="page-btn" href="#" data-page="@(Model.Page + 2)">@(Model.Page + 2)</a>
-    <a class="page-btn next-btn" href="#" data-page="@(Model.Page + 1)">&raquo;</a>
+    <div id="galleryLoading" class="gallery-loading hidden">Loading more songs…</div>
+    <div id="gallerySentinel"></div>
+    </div>
+
 </div>
 
 <script>
@@ -118,7 +175,9 @@
         locale: '@Model.Locale',
         seed: @Model.Seed,
         averageLikes: @Model.AverageLikes.ToString(System.Globalization.CultureInfo.InvariantCulture),
-        page: @Model.Page
+        page: @Model.Page,
+        viewMode: '@Model.ViewMode',
+        pageSize: @Model.PageSize
     };
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
